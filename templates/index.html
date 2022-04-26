@@ -1,10 +1,110 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>searhwork</title>
-</head>
-<body>
-<h2>Скоро все будет. Это работающая часть кода</h2>
-</body>
-</html>
+{% extends "base.html" %} {% block content %}
+  <!--================Hero Banner Area Start =================-->
+  <section class="hero-banner magic-ball">
+    <div class="container">
+
+      <div class="row align-items-center text-center text-md-left">
+        <div class="col-md-6 col-lg-5 mb-5 mb-md-0">
+          <h1>Чувак, тебе 45 лет, пойди и найди работу</h1>
+          <p>Сервис для осуществления полного жизненного цикла приема на работу с двух сторон: соискатель, HR-менеджер</p>
+          <a class="button button-hero mt-4" href="#">Начать</a>
+        </div>
+        <div class="col-md-6 col-lg-7 col-xl-6 offset-xl-1">
+          <img class="img-fluid" src="{{ url_for('static', filename='img/hero-img.png') }}" alt="">
+        </div>
+      </div>
+    </div>
+  </section>
+  <!--================Hero Banner Area End =================-->
+
+
+  <!--================Service Area Start =================-->
+  <section class="section-margin generic-margin">
+    <div class="container">
+      <div class="section-intro text-center pb-90px">
+        <h2>Кто ты?</h2>
+      </div>
+
+      <div class="row">
+        <a class="col-md-6 col-lg-6 mb-4 mb-lg-0" href="#">
+          <div class="service-card text-center">
+            <div class="service-card-img">
+              <img class="img-fluid" src="{{ url_for('static', filename='img/service1.png') }}" alt="">
+            </div>
+            <div class="service-card-body">
+              <h3>Соискатель</h3>
+              <p>Человек, который претендует на свободную вакансию</p>
+            </div>
+          </div>
+        </a>
+        <a class="col-md-6 col-lg-6 mb-4 mb-lg-0" href="#">
+          <div class="service-card text-center">
+            <div class="service-card-img">
+              <img class="img-fluid" src="{{ url_for('static', filename='img/service2.png') }}" alt="">
+            </div>
+            <div class="service-card-body">
+              <h3>HR-менеджер</h3>
+              <p>Человек, который ищет работника в свою контору</p>
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+  <!--================Service Area End =================-->
+
+
+  <!--================About Area Start =================-->
+  <section class="bg-gray section-padding magic-ball magic-ball-about">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-7 col-md-6 mb-4 mb-md-0">
+          <div class="about-img">
+            <img class="img-fluid" src="{{ url_for('static', filename='img/about-img.png') }}" alt="">
+          </div>
+        </div>
+        <div class="col-lg-5 col-md-6 align-self-center about-content">
+          <h2>Не волнуйся</h2>
+          <p>Помогаем искать работу таким как ты</p>
+          <a class="button" href="#">Начать</a>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!--================About Area End =================-->
+
+  <!--================Search Package section Start =================-->
+  <section class="section-margin">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-6 col-xl-5 align-self-center mb-5 mb-lg-0">
+          <div class="search-content">
+            <h2>Найдите подходящую вакансию</h2>
+            <p>Лучшие варианты трудоустройства</p>
+          </div>
+        </div>
+        <div class="col-lg-6 col-xl-6 offset-xl-1">
+          <div class="search-wrapper">
+            <h3>Поиск вакансии</h3>
+
+            <form class="search-form" action="#">
+              <div class="form-group">
+                <div class="input-group">
+                  <input type="text" class="form-control" placeholder="Я ищу...">
+                  <div class="input-group-append">
+                    <span class="input-group-text"><i class="ti-search"></i></span>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <button class="button border-0 mt-3" type="submit">Погнали!</button>
+              </div>
+            </form>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+  <!--================Search Package section End =================-->
+{% endblock %}

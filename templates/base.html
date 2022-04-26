@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>searchwork</title>
+	<link rel="icon" href="{{ url_for('static', filename='img/Fevicon.png') }}" type="image/png">
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap/bootstrap.min.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/all.min.css') }}">
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="bg-shape">
+  <header class="header_area">
+    <div class="main_menu">
+      <nav class="navbar navbar-expand-lg navbar-light">
+        <div class="container box_1620">
+          <a class="navbar-brand logo_h" href="index.html"><img src="{{ url_for('static', filename='img/logo.png') }}" alt=""></a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+
+          <div class="collapse navbar-collapse offset" id="navbarSupportedContent">
+            <ul class="nav navbar-nav menu_nav justify-content-end">
+              <li class="nav-item active"><a class="nav-link" href="index.html">О нас</a></li>
+              <li class="nav-item"><a class="nav-link">Соискателю</a></li>
+              <li class="nav-item"><a class="nav-link">HR-менеджеру</a></li>
+            </ul>
+
+            <div class="nav-right text-center text-lg-right py-4 py-lg-0">
+              <a class="button" href="#">Зарегистрироваться</a>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </div>
+  </header>
+    <main role="main" class="container">
+        {% block content %}{% endblock %}
+    </main>
+  <footer class="footer-area">
+    <div class="container">
+      <div class="single-footer-widget">
+        <h6 class="text-center">Пара слов</h6>
+        <p class="text-center" style="margin: 0; padding-bottom: 1em;">
+          Главное - верь в себя
+        </p>
+      </div>
+    </div>
+  </footer>
+  <script src="{{ url_for('static', filename='bootstrap/bootstrap.bundle.min.js') }}"></script>
+</body>
+</html>
