@@ -1,3 +1,6 @@
 flask
 flask-wtf
 sqlalchemy
+SQLAlchemy-serializer
+flask-login
+flask-restful
