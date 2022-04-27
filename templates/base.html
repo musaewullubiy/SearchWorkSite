@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>searchwork</title>
-	<link rel="icon" href="{{ url_for('static', filename='img/Fevicon.png') }}" type="image/png">
+ <link rel="icon" href="{{ url_for('static', filename='img/Fevicon.png') }}" type="image/png">
 
   <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap/bootstrap.min.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/all.min.css') }}">
@@ -30,7 +30,9 @@
               <li class="nav-item"><a class="nav-link">Соискателю</a></li>
               <li class="nav-item"><a class="nav-link">HR-менеджеру</a></li>
             </ul>
-
+            <div class="nav-right text-center text-lg-right py-4 py-lg-0">
+              <a class="button" href="/login">Войти</a>
+            </div>
             <div class="nav-right text-center text-lg-right py-4 py-lg-0">
               <a class="button" href="/register">Зарегистрироваться</a>
             </div>

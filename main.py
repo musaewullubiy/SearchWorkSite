@@ -34,8 +34,8 @@ def reqister():
                                    form=form,
                                    message="Такой пользователь уже есть")
         user = User(
-            name=form.name,
-            surname=form.surname,
+            name=form.name.data,
+            surname=form.surname.data,
             email=form.email.data,
             about='~',
             age=form.age.data,

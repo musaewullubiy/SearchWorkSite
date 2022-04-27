@@ -26,10 +26,10 @@
         {{ form.age.label }}<br>
         {{ form.age(class="form-control") }}<br>
         {% for error in form.age.errors %}
-            <p class="alert alert-danger" role="alert">
-                {{ error }}
-            </p>
-        {% endfor %}
+    <p class="alert alert-danger" role="alert">
+        {{ error }}
+    </p>
+    {% endfor %}
     </p>
     <p>
         {{ form.email.label }}<br>
