@@ -1,12 +1,13 @@
 import datetime
 
 from flask import Flask, render_template, redirect
-
+from flask_login import current_user
 from forms.authorization import AuthorizationForm
 from forms.register import RegisterForm
 from data.users import User
 from data import db_session
 from flask_login import LoginManager, logout_user, login_required, login_user
+
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
@@ -79,6 +80,16 @@ def login():
                                message="Неправильный логин или пароль",
                                form=form)
     return render_template('authorization.html', title='Авторизация', form=form)
+
+
+@app.route('/profile/hr/<int:hr_id>')
+def profile_hr(hr_id):
+    return render_template('hr_profile.html')
+
+
+@app.route('/profile/user/<int:user_id>')
+def profile_user(user_id):
+    return render_template('user_profile.html')
 
 
 if __name__ == '__main__':
