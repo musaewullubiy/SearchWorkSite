@@ -25,6 +25,18 @@ body {
 }
 
 
+.calendar-button {
+  margin: 1em;
+}
+
+
+.user-info-div {
+  font-size: 20px;
+  background: white;
+  padding: 1em;
+}
+
+
 #container-main {
   min-height: 700px;
 }
@@ -1188,6 +1200,7 @@ h3, .h3 {
 }
 
 .testimonial__item {
+  margin: 5px;
   background: #fff;
   border-radius: 20px;
   padding: 30px 15px;
