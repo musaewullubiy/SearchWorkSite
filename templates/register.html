@@ -58,6 +58,20 @@
     </p>
     {% endfor %}
     </p>
+    <p>
+        {{ form.user_type.label }}<br>
+        {% for subfield in form.user_type %}
+        <tr>
+            <td>{{ subfield }}</td>
+            <td>{{ subfield.label }}</td>
+        </tr>
+        {% endfor %}
+        {% for error in form.user_type.errors %}
+    <p class="alert alert-danger" role="alert">
+        {{ error }}
+    </p>
+    {% endfor %}
+    </p>
     <p>{{ form.submit(type="submit", class="btn btn-primary") }}</p>
     {{message}}
 </form>

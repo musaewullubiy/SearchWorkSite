@@ -40,7 +40,8 @@ def reqister():
             email=form.email.data,
             about='~',
             age=form.age.data,
-            modified_date=datetime.datetime.now()
+            modified_date=datetime.datetime.now(),
+            user_type=form.user_type.data
         )
         user.set_password(form.password.data)
         db_sess.add(user)
