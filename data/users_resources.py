@@ -57,6 +57,7 @@ class UsersListResource(Resource):
             modified_date=args['modified_date'],
             user_type=set_password(args['user_type'])
         )
+        user.set_password(args['hashed_password'])
         session.add(user)
         session.commit()
         return jsonify({'success': 'OK'})

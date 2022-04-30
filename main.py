@@ -11,6 +11,8 @@ from flask_login import LoginManager, logout_user, login_required, login_user
 
 from flask_restful import Api
 
+from requests import post
+
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
@@ -60,18 +62,13 @@ def reqister():
             return render_template('register.html', title='Регистрация',
                                    form=form,
                                    message="Такой пользователь уже есть")
-        user = User(
-            name=form.name.data,
-            surname=form.surname.data,
-            email=form.email.data,
-            about='~',
-            age=form.age.data,
-            modified_date=datetime.datetime.now(),
-            user_type=form.user_type.data
-        )
-        user.set_password(form.password.data)
-        db_sess.add(user)
-        db_sess.commit()
+        print(post('http://localhost:5000/api/users', json={'name': form.name.data,
+                                                               'surname': form.surname.data,
+                                                               'about': '~',
+                                                               'age': 17,
+                                                               'email': form.email.data,
+                                                               'hashed_password': form.password.data,
+                                                               'user_type': form.user_type.data}).json())
         return redirect('/login')
     return render_template('register.html', title='Регистрация', form=form)
 
