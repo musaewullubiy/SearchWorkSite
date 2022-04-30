@@ -2,17 +2,21 @@ import datetime
 
 from flask import Flask, render_template, redirect
 from flask_login import current_user
+from data import users_resources
 from forms.authorization import AuthorizationForm
 from forms.register import RegisterForm
 from data.users import User
 from data import db_session
 from flask_login import LoginManager, logout_user, login_required, login_user
 
+from flask_restful import Api
+
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
 login_manager = LoginManager()
 login_manager.init_app(app)
+api = Api(app)
 
 
 @login_manager.user_loader
@@ -30,12 +34,17 @@ def logout():
 
 def main():
     db_session.global_init("db/members.db")
+
+    api.add_resource(users_resources.UsersListResource, '/api/users')  # для списка объектов
+    api.add_resource(users_resources.UsersResource,
+                     '/api/users/<int:user_id>')  # для одного объекта
+
     app.run()
 
 
 @app.route('/')
 def index():
-    return render_template('index.html', title="Searchwork")
+    return render_template('index.html', title="searchwork")
 
 
 @app.route('/register', methods=['GET', 'POST'])
