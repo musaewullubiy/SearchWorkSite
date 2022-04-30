@@ -11,7 +11,7 @@ from flask_login import LoginManager, logout_user, login_required, login_user
 
 from flask_restful import Api
 
-from requests import post
+from requests import post, get
 
 
 app = Flask(__name__)
@@ -63,12 +63,12 @@ def reqister():
                                    form=form,
                                    message="Такой пользователь уже есть")
         print(post('http://localhost:5000/api/users', json={'name': form.name.data,
-                                                               'surname': form.surname.data,
-                                                               'about': '~',
-                                                               'age': 17,
-                                                               'email': form.email.data,
-                                                               'hashed_password': form.password.data,
-                                                               'user_type': form.user_type.data}).json())
+                                                            'surname': form.surname.data,
+                                                            'about': '~',
+                                                            'age': 17,
+                                                            'email': form.email.data,
+                                                            'hashed_password': form.password.data,
+                                                            'user_type': form.user_type.data}).json())
         return redirect('/login')
     return render_template('register.html', title='Регистрация', form=form)
 
@@ -90,12 +90,21 @@ def login():
 
 @app.route('/profile/hr/<int:hr_id>')
 def profile_hr(hr_id):
-    return render_template('hr_profile.html')
+    db_sess = db_session.create_session()
+    user = db_sess.query(User).filter(User.id == hr_id, User.user_type == 'HR-менеджер').first()
+    if user:
+        return render_template('hr_profile.html', user=user)
+    else:
+        return '404'
 
 
 @app.route('/profile/user/<int:user_id>')
 def profile_user(user_id):
-    return render_template('user_profile.html')
+    db_sess = db_session.create_session()
+    user = db_sess.query(User).filter(User.id == user_id, User.user_type == 'Соискатель').first()
+    if user:
+        return render_template('user_profile.html', user=user)
+    return '404'
 
 
 if __name__ == '__main__':

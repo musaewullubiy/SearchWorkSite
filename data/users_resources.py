@@ -53,11 +53,10 @@ class UsersListResource(Resource):
             about=args['about'],
             age=args['age'],
             email=args['email'],
-            hashed_password=args['hashed_password'],
+            hashed_password=set_password(args['hashed_password']),
             modified_date=args['modified_date'],
-            user_type=set_password(args['user_type'])
+            user_type=args['user_type']
         )
-        user.set_password(args['hashed_password'])
         session.add(user)
         session.commit()
         return jsonify({'success': 'OK'})
