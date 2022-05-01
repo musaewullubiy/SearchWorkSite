@@ -3,6 +3,7 @@ import datetime
 from flask import Flask, render_template, redirect
 from flask_login import current_user
 from data import users_resources
+from data import vacancy_resoursers
 from forms.authorization import AuthorizationForm
 from forms.register import RegisterForm
 from data.users import User
@@ -13,6 +14,9 @@ from flask_restful import Api
 
 from requests import post, get
 
+from forms.vacancy import VacancyForm
+
+PATH = 'http://localhost:5000'
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
@@ -40,6 +44,8 @@ def main():
     api.add_resource(users_resources.UsersListResource, '/api/users')  # для списка объектов
     api.add_resource(users_resources.UsersResource,
                      '/api/users/<int:user_id>')  # для одного объекта
+    api.add_resource(vacancy_resoursers.VacancyResource, "/api/vacancy/<int:vacancy_id>")
+    api.add_resource(vacancy_resoursers.VacancyListResource, "/api/vacancy")
 
     app.run()
 
@@ -62,13 +68,13 @@ def reqister():
             return render_template('register.html', title='Регистрация',
                                    form=form,
                                    message="Такой пользователь уже есть")
-        print(post('http://localhost:5000/api/users', json={'name': form.name.data,
-                                                            'surname': form.surname.data,
-                                                            'about': '~',
-                                                            'age': 17,
-                                                            'email': form.email.data,
-                                                            'hashed_password': form.password.data,
-                                                            'user_type': form.user_type.data}).json())
+        post(PATH + '/api/users', json={'name': form.name.data,
+                                        'surname': form.surname.data,
+                                        'about': '~',
+                                        'age': form.age.data,
+                                        'email': form.email.data,
+                                        'hashed_password': form.password.data,
+                                        'user_type': form.user_type.data}).json()
         return redirect('/login')
     return render_template('register.html', title='Регистрация', form=form)
 
@@ -105,6 +111,22 @@ def profile_user(user_id):
     if user:
         return render_template('user_profile.html', user=user)
     return '404'
+
+
+@app.route('/addvacancy', methods=["GET", "POST"])
+@login_required
+def add_vacancy():
+    add_form = VacancyForm()
+    if add_form.validate_on_submit():
+        post(PATH + "/api/vacancy",
+             json={"tags": add_form.tags.data,
+                   "text": add_form.text.data,
+                   "salary": add_form.salary.data,
+                   "is_actual": add_form.is_actual.data,
+                   "hr_manager": current_user.id})
+
+        return redirect("/")
+    return render_template("addvacancy.html", title="Adding a vacancy", form=add_form)
 
 
 if __name__ == '__main__':
