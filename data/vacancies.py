@@ -13,9 +13,7 @@ class Vacancy(SqlAlchemyBase, UserMixin, SerializerMixin):
     tags = sqlalchemy.Column(sqlalchemy.Text)
     text = sqlalchemy.Column(sqlalchemy.Text)
     salary = sqlalchemy.Column(sqlalchemy.String)
-
-    added_date = sqlalchemy.Column(sqlalchemy.DateTime, default=datetime.datetime.now())
-    is_finished = sqlalchemy.Column(sqlalchemy.Boolean, default=False)
+    is_actual = sqlalchemy.Column(sqlalchemy.Boolean, default=True)
 
     hr_manager = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey("users.id"))
     user = orm.relation('User')
