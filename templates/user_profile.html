@@ -5,61 +5,24 @@
         <h2>{{ user.name }} {{ user.surname }}</h2>
         <p>{{ user.user_type }}</p>
       </div>
-      <h4>Инфо:</h4>
-      <div class="user-info-div">
-        <p>16 лет, Махачкала, Python Dev <br>
-          Стек: <br>
-          Python junior <br>
-          Flask, PyQT5, pygame, OpenCV, sqlite3 <br>
-        </p>
-      </div>
-      <h4>Проекты:</h4>
       <div class="row">
-        <div class="col-md-6 col-lg-4 mb-4 mb-lg-0">
-          <div class="card-blog">
-            <div class="card-blog-body">
-              <a href="#">
-                <h4>searchwork site</h4>
-              </a>
-              <ul class="card-blog-info">
-                <li><a href="#"><span class="align-middle"><i class="ti-notepad"></i></span>April 27, 2022</a></li>
-                <li><a href="#"><span class="align-middle"><i class="ti-comments-smiley"></i></span>03 Comments</a></li>
-              </ul>
-              <a href="https://github.com/musaewullubiy/searchwork_site">Ссылка</a>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-md-6 col-lg-4 mb-4 mb-lg-0">
-          <div class="card-blog">
-            <div class="card-blog-body">
-              <a href="#">
-                <h4>searchwork site</h4>
-              </a>
-              <ul class="card-blog-info">
-                <li><a href="#"><span class="align-middle"><i class="ti-notepad"></i></span>April 27, 2022</a></li>
-                <li><a href="#"><span class="align-middle"><i class="ti-comments-smiley"></i></span>03 Comments</a></li>
-              </ul>
-              <a href="https://github.com/musaewullubiy/searchwork_site">Ссылка</a>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-md-6 col-lg-4 mb-4 mb-lg-0">
-          <div class="card-blog">
-            <div class="card-blog-body">
-              <a href="#">
-                <h4>searchwork site</h4>
-              </a>
-              <ul class="card-blog-info">
-                <li><a href="#"><span class="align-middle"><i class="ti-notepad"></i></span>April 27, 2022</a></li>
-                <li><a href="#"><span class="align-middle"><i class="ti-comments-smiley"></i></span>03 Comments</a></li>
-              </ul>
-              <a href="https://github.com/musaewullubiy/searchwork_site">Ссылка</a>
-            </div>
-          </div>
-        </div>
-        <a class="button calendar-button" href="/calendar">Календарь</a>
+        <h1 class="col">Инфо:</h1>
+        {% if current_user.id == user.id %}
+          <a class="col-md-2 button calendar-button text-center" href="/add/about">Добавить</a>
+        {% endif %}
+      </div>
+      <div class="user-info-div">
+        {% for text in user.about.split('\n') %}
+          <p>{{ text }}</p>
+        {% endfor %}
+      </div>
+      <div class="row">
+        <h1 class="col">Проекты:</h1>
+        {% if current_user.id == user.id %}
+          <a class="col-md-2 button calendar-button text-center" href="/add/project">Добавить</a>
+        {% endif %}
+      </div>
+      <a class="button calendar-button text-center" href="/calendar">Календарь</a>
       </div>
     </div>
   </section>

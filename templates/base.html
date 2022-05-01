@@ -17,7 +17,7 @@
     <div class="main_menu">
         <nav class="navbar navbar-expand-lg navbar-light">
             <div class="container box_1620">
-                <a class="navbar-brand logo_h" href="index.html"><img
+                <a class="navbar-brand logo_h" href="/"><img
                         src="{{ url_for('static', filename='img/logo.png') }}" alt=""></a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse"
                         data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
@@ -40,6 +40,10 @@
                         <div class="nav-right text-center text-lg-right py-4 py-lg-0">
                             <a class="button" href="/register">Зарегистрироваться</a>
                         </div>
+                    {% else %}
+                        <div class="nav-right text-center text-lg-right py-4 py-lg-0">
+                            <a class="button" href="/profile/{{ current_user.id }}">Профиль</a>
+                        </div>
                     {% endif %}
                 </div>
             </div>
@@ -49,7 +53,7 @@
 <main role="main" class="container" id="container-main">
     {% block content %}{% endblock %}
 </main>
-<footer class="footer-area">
+<footer class="footer-area" style="height: 100%; margin-top: 10%;">
     <div class="container">
         <div class="single-footer-widget">
             <h6 class="text-center">Пара слов</h6>

@@ -35,6 +35,21 @@ class UsersResource(Resource):
         session.commit()
         return jsonify({'success': 'OK'})
 
+    def put(self, user_id):
+        abort_if_user_not_found(user_id)
+        session = db_session.create_session()
+        args = parser.parse_args()
+        user = session.query(User).get(user_id)
+        user.name = args['name']
+        user.surname = args['surname']
+        user.about = args['about']
+        user.age = args['age']
+        user.email = args['email']
+        user.hashed_password = args['hashed_password']
+        user.user_type = args['user_type']
+        session.commit()
+        return jsonify({'success': 'OK'})
+
 
 class UsersListResource(Resource):
     def get(self):

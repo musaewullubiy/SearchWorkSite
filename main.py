@@ -3,16 +3,18 @@ import datetime
 from flask import Flask, render_template, redirect
 from flask_login import current_user
 from data import users_resources
+
 from forms.authorization import AuthorizationForm
 from forms.register import RegisterForm
+from forms.add_about import AddAboutForm
+
 from data.users import User
 from data import db_session
 from flask_login import LoginManager, logout_user, login_required, login_user
 
 from flask_restful import Api
 
-from requests import post, get
-
+from requests import post, get, put
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
@@ -62,13 +64,13 @@ def reqister():
             return render_template('register.html', title='Регистрация',
                                    form=form,
                                    message="Такой пользователь уже есть")
-        print(post('http://localhost:5000/api/users', json={'name': form.name.data,
-                                                            'surname': form.surname.data,
-                                                            'about': '~',
-                                                            'age': 17,
-                                                            'email': form.email.data,
-                                                            'hashed_password': form.password.data,
-                                                            'user_type': form.user_type.data}).json())
+        post('http://localhost:5000/api/users', json={'name': form.name.data,
+                                                      'surname': form.surname.data,
+                                                      'about': '~',
+                                                      'age': form.age.data,
+                                                      'email': form.email.data,
+                                                      'hashed_password': form.password.data,
+                                                      'user_type': form.user_type.data}).json()
         return redirect('/login')
     return render_template('register.html', title='Регистрация', form=form)
 
@@ -88,23 +90,27 @@ def login():
     return render_template('authorization.html', title='Авторизация', form=form)
 
 
-@app.route('/profile/hr/<int:hr_id>')
-def profile_hr(hr_id):
+@app.route('/profile/<int:user_id>')
+def profile_page(user_id):
     db_sess = db_session.create_session()
-    user = db_sess.query(User).filter(User.id == hr_id, User.user_type == 'HR-менеджер').first()
+    user = db_sess.query(User).filter(User.id == user_id).first()
     if user:
-        return render_template('hr_profile.html', user=user)
-    else:
-        return '404'
-
-
-@app.route('/profile/user/<int:user_id>')
-def profile_user(user_id):
-    db_sess = db_session.create_session()
-    user = db_sess.query(User).filter(User.id == user_id, User.user_type == 'Соискатель').first()
-    if user:
-        return render_template('user_profile.html', user=user)
+        if user.user_type == 'HR-менеджер':
+            return render_template('hr_profile.html', user=user)
+        elif user.user_type == 'Соискатель':
+            return render_template('user_profile.html', user=user)
     return '404'
+
+
+@app.route('/add/about', methods=['GET', 'POST'])
+def add_about_page():
+    form = AddAboutForm()
+    if form.validate_on_submit():
+        user = get(f'http://localhost:5000/api/users/{current_user.id}').json()['user']
+        user['about'] = form.text.data
+        put(f'http://localhost:5000/api/users/{current_user.id}', json=user)
+        return redirect(f'/profile/{current_user.id}')
+    return render_template('add_about.html', form=form)
 
 
 if __name__ == '__main__':

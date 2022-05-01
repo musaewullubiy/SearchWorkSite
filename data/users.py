@@ -23,6 +23,7 @@ class User(SqlAlchemyBase, UserMixin, SerializerMixin):
                                       default=datetime.datetime.now())
     user_type = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     vacancies = orm.relation('Vacancy', back_populates='user')
+    projects = orm.relation('Project', back_populates='user')
 
     def set_password(self, password):
         self.hashed_password = generate_password_hash(password)
