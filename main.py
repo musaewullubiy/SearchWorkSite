@@ -173,7 +173,7 @@ def search_page(search_text):
     results = list()
     db_sess = db_session.create_session()
     for i in search_text.split():
-        data = db_sess.query(Vacancy).filter(i in Vacancy.tags).fetchall()
+        data = db_sess.query(Vacancy).filter(Vacancy.tags.like(f'%{i}%')).all()
         results += data
     return render_template('search_page.html', results=results)
 

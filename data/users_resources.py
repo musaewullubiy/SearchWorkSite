@@ -69,7 +69,6 @@ class UsersListResource(Resource):
             age=args['age'],
             email=args['email'],
             hashed_password=set_password(args['hashed_password']),
-            modified_date=args['modified_date'],
             user_type=args['user_type']
         )
         session.add(user)
