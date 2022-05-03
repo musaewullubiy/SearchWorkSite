@@ -15,6 +15,7 @@ from forms.vacancy import VacancyForm
 
 from data.users import User
 from data.projects import Project
+from data.vacancies import Vacancy
 
 from data import db_session
 
@@ -165,6 +166,16 @@ def delete_project(project_id):
     except Exception:
         return redirect(f'/profile/{current_user.id}')
     return redirect(f'/profile/{current_user.id}')
+
+
+@app.route('/search/<string:search_text>')
+def search_page(search_text):
+    results = list()
+    db_sess = db_session.create_session()
+    for i in search_text.split():
+        data = db_sess.query(Vacancy).filter(i in Vacancy.tags).fetchall()
+        results += data
+    return render_template('search_page.html', results=results)
 
 
 if __name__ == '__main__':
