@@ -4,5 +4,5 @@ from wtforms.validators import DataRequired
 
 
 class AddAboutForm(FlaskForm):
-    text = TextAreaField('', validators=[DataRequired()])
+    text = TextAreaField('Описание', validators=[DataRequired()])
     submit = SubmitField('Войти')

@@ -4,7 +4,7 @@ from werkzeug.security import generate_password_hash
 
 from data import db_session
 from data.vacancies import Vacancy
-from data.reqparse_vacancy import vacancy_parser
+from data.reqparse_vacancy import parser
 
 
 def abort_if_vacancy_not_found(vacancy_id):
@@ -43,7 +43,7 @@ class VacancyListResource(Resource):
                            vacancies]})
 
     def post(self):
-        args = vacancy_parser.parse_args()
+        args = parser.parse_args()
         session = db_session.create_session()
         vacancy = Vacancy()
         vacancy.tags = args["tags"]

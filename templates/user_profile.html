@@ -22,6 +22,25 @@
           <a class="col-md-2 button calendar-button text-center" href="/add/project">Добавить</a>
         {% endif %}
       </div>
+      <div class="row">
+          {% for project in projects %}
+            <div class="col-md-6 col-lg-4 mb-4 mb-lg-0">
+              <div class="card-blog">
+                <div class="card-blog-body">
+                  <p>
+                    <h4>{{ project.title }}</h4>
+                  </p>
+                  <ul class="card-blog-info">
+                    {% if current_user.id == user.id %}
+                    <li><a href="/delete-project/{{ project.id }}"><span class="align-middle"><i class="ti-comments-smiley"></i></span>Удалить</a></li>
+                    {% endif %}
+                  </ul>
+                  <a href="{{ project.link }}">Ссылка</a>
+                </div>
+              </div>
+          </div>
+          {% endfor %}
+        </div>
       <a class="button calendar-button text-center" href="/calendar">Календарь</a>
       </div>
     </div>
