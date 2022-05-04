@@ -46,9 +46,9 @@ def logout():
 def main():
     db_session.global_init("db/members.db")
 
-    api.add_resource(users_resources.UsersListResource, '/api/users')  # для списка объектов
-    api.add_resource(users_resources.UsersResource,
-                     '/api/users/<int:user_id>')  # для одного объекта
+    api.add_resource(users_resources.UsersListResource, '/api/users')
+    api.add_resource(users_resources.UsersResource, '/api/users/<int:user_id>')
+
     api.add_resource(vacancy_resources.VacancyResource, "/api/vacancy/<int:vacancy_id>")
     api.add_resource(vacancy_resources.VacancyListResource, "/api/vacancy")
 
@@ -103,6 +103,7 @@ def login():
 
 
 @app.route('/profile/<int:user_id>')
+@login_required
 def profile_page(user_id):
     db_sess = db_session.create_session()
     user = db_sess.query(User).filter(User.id == user_id).first()
@@ -132,6 +133,7 @@ def add_vacancy():
 
 
 @app.route('/add/about', methods=['GET', 'POST'])
+@login_required
 def add_about_page():
     form = AddAboutForm()
     if form.validate_on_submit():
@@ -143,6 +145,7 @@ def add_about_page():
 
 
 @app.route('/add/project', methods=['GET', 'POST'])
+@login_required
 def add_project_page():
     form = AddProjectForm()
     if form.validate_on_submit():

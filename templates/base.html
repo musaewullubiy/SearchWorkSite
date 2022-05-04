@@ -34,15 +34,18 @@
                         <li class="nav-item"><a class="nav-link">HR-менеджеру</a></li>
                     </ul>
                     {% if not current_user.is_authenticated %}
-                        <div class="nav-right text-center text-lg-right py-4 py-lg-0">
+                        <div class="nav-btn text-center text-lg-right py-4 py-lg-0">
                             <a class="button" href="/login">Войти</a>
                         </div>
-                        <div class="nav-right text-center text-lg-right py-4 py-lg-0">
+                        <div class="nav-btn text-center text-lg-right py-4 py-lg-0">
                             <a class="button" href="/register">Зарегистрироваться</a>
                         </div>
                     {% else %}
-                        <div class="nav-right text-center text-lg-right py-4 py-lg-0">
+                        <div class="nav-btn text-center text-lg-right py-4 py-lg-0">
                             <a class="button" href="/profile/{{ current_user.id }}">Профиль</a>
+                        </div>
+                        <div class="nav-btn text-center text-lg-right py-4 py-lg-0">
+                            <a class="button" href="/logout">Выйти</a>
                         </div>
                     {% endif %}
                 </div>
