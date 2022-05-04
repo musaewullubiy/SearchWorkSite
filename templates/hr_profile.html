@@ -12,13 +12,20 @@
                     <div class="testimonial__content mt-3 mt-sm-0">
                         <h3>{{ user.name }} {{ user.surname }}</h3>
                         <p>{{ user.user_type }}</p>
-                        <p class="testimonial__i">{{ user.age }} лет, Los Angeles: "Я считаю, что лезгины стащили наш хинкал"</p>
+                        <p class="testimonial__i">{{ user.age }} лет, Los Angeles: "Я считаю, что лезгины стащили наш
+                            хинкал"</p>
                         <span class="testimonial__icon"><i class="ti-quote-right"></i></span>
                     </div>
                 </div>
             </div>
         </div>
-        <h4>Вакансии:</h4>
+        <div class="row">
+            <h1 class="col">Вакансии:</h1>
+            <br>
+            {% if current_user.id == user.id %}
+                <a class="col-md-2 button calendar-button text-center" href="/add-vacancy">Добавить вакансию</a>
+            {% endif %}
+        </div>
         <div class="testimonial__item">
             <div class="row">
                 <div class="col-md-9 col-lg-10">

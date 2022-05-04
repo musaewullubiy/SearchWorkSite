@@ -23,7 +23,8 @@ class VacancyResource(Resource):
         abort_if_vacancy_not_found(vacancy_id)
         session = db_session.create_session()
         vacancies = session.query(Vacancy).get(vacancy_id)
-        return jsonify({'Vacancy': vacancies.to_dict(only=('tags', 'text', 'salary', 'is_actual', "hr_manager"))})
+        return jsonify(
+            {'Vacancy': vacancies.to_dict(only=('title', 'tags', 'text', 'salary', 'is_actual', "hr_manager"))})
 
     def delete(self, vacancy_id):
         abort_if_vacancy_not_found(vacancy_id)
@@ -39,13 +40,14 @@ class VacancyListResource(Resource):
         session = db_session.create_session()
         vacancies = session.query(Vacancy).all()
         return jsonify(
-            {'vacancies': [item.to_dict(only=('tags', 'text', 'salary', 'is_actual', "hr_manager")) for item in
+            {'vacancies': [item.to_dict(only=('title', "tags", 'text', 'salary', 'is_actual', "hr_manager")) for item in
                            vacancies]})
 
     def post(self):
         args = parser.parse_args()
         session = db_session.create_session()
         vacancy = Vacancy()
+        vacancy.title = args["title"]
         vacancy.tags = args["tags"]
         vacancy.text = args["text"]
         vacancy.salary = args["salary"]

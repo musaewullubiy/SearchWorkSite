@@ -11,7 +11,7 @@ from forms.authorization import AuthorizationForm
 from forms.register import RegisterForm
 from forms.add_about import AddAboutForm
 from forms.add_project import AddProjectForm
-from forms.vacancy import VacancyForm
+from forms.add_vacancy import VacancyForm
 
 from data.users import User
 from data.projects import Project
@@ -116,13 +116,14 @@ def profile_page(user_id):
     return '404'
 
 
-@app.route('/addvacancy', methods=["GET", "POST"])
+@app.route('/add-vacancy', methods=["GET", "POST"])
 @login_required
 def add_vacancy():
     form = VacancyForm()
     if form.validate_on_submit():
         post(PATH + "/api/vacancy",
-             json={"tags": form.tags.data,
+             json={"title": form.title.data,
+                 "tags": form.tags.data,
                    "text": form.text.data,
                    "salary": form.salary.data,
                    "is_actual": form.is_actual.data,
@@ -173,11 +174,11 @@ def delete_project(project_id):
 
 @app.route('/search/<string:search_text>')
 def search_page(search_text):
-    results = list()
+    results = set()
     db_sess = db_session.create_session()
     for i in search_text.split():
-        data = db_sess.query(Vacancy).filter(Vacancy.tags.like(f'%{i}%')).all()
-        results += data
+        data = set(db_sess.query(Vacancy).filter(Vacancy.tags.like(f'%{i}%')).all())
+        results = results | data
     return render_template('search_page.html', results=results)
 
 

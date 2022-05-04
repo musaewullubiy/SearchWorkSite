@@ -10,6 +10,7 @@ class Vacancy(SqlAlchemyBase, UserMixin, SerializerMixin):
     __tablename__ = 'vacancies'
 
     id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True, autoincrement=True)
+    title = sqlalchemy.Column(sqlalchemy.String)
     tags = sqlalchemy.Column(sqlalchemy.Text)
     text = sqlalchemy.Column(sqlalchemy.Text)
     salary = sqlalchemy.Column(sqlalchemy.String)
