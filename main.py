@@ -12,6 +12,7 @@ from forms.register import RegisterForm
 from forms.add_about import AddAboutForm
 from forms.add_project import AddProjectForm
 from forms.add_vacancy import VacancyForm
+from forms.poisk_form import PoiskForm
 
 from data.users import User
 from data.projects import Project
@@ -60,7 +61,8 @@ def main():
 
 @app.route('/')
 def index():
-    return render_template('index.html', title="searchwork")
+    poisk_form = PoiskForm()
+    return render_template('index.html', title="searchwork", poisk_form=poisk_form)
 
 
 @app.route('/register', methods=['GET', 'POST'])
