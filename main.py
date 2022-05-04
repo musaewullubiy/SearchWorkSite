@@ -125,7 +125,7 @@ def add_vacancy():
     if form.validate_on_submit():
         post(PATH + "/api/vacancy",
              json={"title": form.title.data,
-                 "tags": form.tags.data,
+                 "tags": form.tags.data.lower(),
                    "text": form.text.data,
                    "salary": form.salary.data,
                    "is_actual": form.is_actual.data,
@@ -179,7 +179,7 @@ def search_page(search_text):
     results = set()
     db_sess = db_session.create_session()
     for i in search_text.split():
-        data = set(db_sess.query(Vacancy).filter(Vacancy.tags.like(f'%{i}%')).all())
+        data = set(db_sess.query(Vacancy).filter(Vacancy.tags.like(f'%{i.lower()}%')).all())
         results = results | data
     return render_template('search_page.html', results=results)
 
