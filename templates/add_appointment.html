@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Собеседование</h1>
+<form action="" method="post">
+    {{ form.hidden_tag() }}
+    <p>
+        {{ form.message.label }}<br>
+        {{ form.message(class="form-control") }}<br>
+        {% for error in form.message.errors %}
+    <p class="alert alert-danger" role="alert">
+        {{ error }}
+    </p>
+    {% endfor %}
+    </p>
+    <p>
+        {{ form.date.label }}<br>
+        {{ form.date(class="form-control") }}<br>
+        {% for error in form.link.errors %}
+    <p class="alert alert-danger" role="alert">
+        {{ error }}
+    </p>
+    {% endfor %}
+    </p>
+    <p>
+        {{ form.platform.label }}<br>
+        {{ form.platform(class="form-control") }}<br>
+        {% for error in form.platform.errors %}
+    <p class="alert alert-danger" role="alert">
+        {{ error }}
+    </p>
+    {% endfor %}
+    </p>
+    <p>
+        {{ form.link.label }}<br>
+        {{ form.link(class="form-control") }}<br>
+        {% for error in form.link.errors %}
+    <p class="alert alert-danger" role="alert">
+        {{ error }}
+    </p>
+    {% endfor %}
+    </p>
+    <p>{{ form.submit(type="submit", class="btn btn-primary") }}</p>
+    {{message}}
+</form>
+{% endblock %}

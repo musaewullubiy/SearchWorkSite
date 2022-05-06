@@ -6,6 +6,7 @@ from requests import post, get, put, delete
 from data import users_resources
 from data import vacancy_resources
 from data import projects_resources
+from forms.add_appointment import AddAppointmentForm
 
 from forms.authorization import AuthorizationForm
 from forms.register import RegisterForm
@@ -20,9 +21,7 @@ from data.vacancies import Vacancy
 
 from data import db_session
 
-
 PATH = 'http://localhost:5000'
-
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
@@ -125,7 +124,7 @@ def add_vacancy():
     if form.validate_on_submit():
         post(PATH + "/api/vacancy",
              json={"title": form.title.data,
-                 "tags": form.tags.data.lower(),
+                   "tags": form.tags.data.lower(),
                    "text": form.text.data,
                    "salary": form.salary.data,
                    "is_actual": form.is_actual.data,
@@ -182,6 +181,12 @@ def search_page(search_text):
         data = set(db_sess.query(Vacancy).filter(Vacancy.tags.like(f'%{i.lower()}%')).all())
         results = results | data
     return render_template('search_page.html', results=results)
+
+
+@app.route('/add-project/<int:user_id>')
+def add_appointment(user_id):
+    form = AddAppointmentForm()
+    return render_template('add_appointment.html', form=form)
 
 
 if __name__ == '__main__':
