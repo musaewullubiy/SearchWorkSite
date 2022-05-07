@@ -6,6 +6,7 @@ from requests import post, get, put, delete
 from data import users_resources
 from data import vacancy_resources
 from data import projects_resources
+from data import appointment_recource
 from forms.add_appointment import AddAppointmentForm
 
 from forms.authorization import AuthorizationForm
@@ -21,7 +22,7 @@ from data.vacancies import Vacancy
 
 from data import db_session
 
-PATH = 'http://localhost:5000'
+PATH = 'http://127.0.0.1:5000'
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
@@ -54,6 +55,9 @@ def main():
 
     api.add_resource(projects_resources.ProjectResource, "/api/project/<int:project_id>")
     api.add_resource(projects_resources.ProjectListResource, "/api/project")
+
+    api.add_resource(appointment_recource.AppointmentResource, "/api/appointment/<int:appointment_id>")
+    api.add_resource(appointment_recource.AppointmentListResource, "/api/appointment")
 
     app.run()
 
@@ -183,9 +187,26 @@ def search_page(search_text):
     return render_template('search_page.html', results=results)
 
 
-@app.route('/add-project/<int:user_id>')
-def add_appointment(user_id):
+@login_required
+@app.route('/add-appointment/<int:p2_id>', methods=['GET', 'POST'])
+def add_appointment(p2_id):
     form = AddAppointmentForm()
+    if form.validate_on_submit():
+        if current_user.user_type == "HR-менеджер":
+            hr = current_user.id
+            finder = p2_id
+        else:
+            hr = p2_id
+            finder = current_user.id
+        post(PATH + "/api/appointment",
+             json={"message": form.message.data,
+                   "date": form.date.data.strftime("%Y-%m-%d"),
+                   "time": form.time.data.strftime("%H:%M"),
+                   "platform": form.platform.data,
+                   "link": form.link.data,
+                   "hr": hr,
+                   "finder": finder})
+        return redirect('/')
     return render_template('add_appointment.html', form=form)
 
 

@@ -16,7 +16,16 @@
     <p>
         {{ form.date.label }}<br>
         {{ form.date(class="form-control") }}<br>
-        {% for error in form.link.errors %}
+        {% for error in form.time.errors %}
+    <p class="alert alert-danger" role="alert">
+        {{ error }}
+    </p>
+    {% endfor %}
+    </p>
+    <p>
+        {{ form.time.label }}<br>
+        {{ form.time(class="form-control") }}<br>
+        {% for error in form.time.errors %}
     <p class="alert alert-danger" role="alert">
         {{ error }}
     </p>
