@@ -3,11 +3,11 @@
 {% block content %}
 
 <section class="section-padding bg-gray" style="min-height: 730px">
-    <h2>{{ vacancy.tags }}</h2>
+    <h2>{{ vacancy.title }}</h2>
     <h5>{{ vacancy.salary }}</h5>
     <p>{{ vacancy.text }}</p>
     {% if current_user.user_type == 'Соискатель' %}
-        <a href="#">Откликнуться</a>
+        <a href="/add-appointment/{{ vacancy.hr_manager }}">Откликнуться</a>
     {% endif %}
 </section>
 

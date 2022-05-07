@@ -1,13 +1,13 @@
+from requests import post, get, put, delete
+
 from flask import Flask, render_template, redirect
 from flask_login import LoginManager, logout_user, login_required, login_user, current_user
 from flask_restful import Api
-from requests import post, get, put, delete
 
 from data import users_resources
 from data import vacancy_resources
 from data import projects_resources
 from data import appointment_recource
-from forms.add_appointment import AddAppointmentForm
 
 from forms.authorization import AuthorizationForm
 from forms.register import RegisterForm
@@ -15,7 +15,6 @@ from forms.search import SearchForm
 from forms.add_about import AddAboutForm
 from forms.add_project import AddProjectForm
 from forms.add_vacancy import VacancyForm
-from forms.poisk_form import PoiskForm
 
 from data.users import User
 from data.projects import Project
@@ -66,9 +65,11 @@ def main():
 @app.route('/', methods=['GET', 'POST'])
 def index():
     form = SearchForm()
+    print(form.validate_on_submit())
     if form.validate_on_submit():
-        print(form.search_text.data)
-        return redirect(f'/{form.search_text.data}/')
+        string = form.search_text.data
+        print(string)
+        return redirect(f'/search/{form.search_text.data}')
     return render_template('index.html', title="searchwork", form=form)
 
 
@@ -127,7 +128,6 @@ def profile_page(user_id):
 
 
 @app.route('/vacancy/<int:vacancy_id>')
-@login_required
 def vacancy_page(vacancy_id):
     db_sess = db_session.create_session()
     vacancy = db_sess.query(Vacancy).filter(Vacancy.id == vacancy_id).first()
@@ -203,29 +203,6 @@ def search_page(search_text):
         data = set(db_sess.query(Vacancy).filter(Vacancy.tags.like(f'%{i.lower()}%')).all())
         results = results | data
     return render_template('search_page.html', results=results, form=form)
-
-
-@login_required
-@app.route('/add-appointment/<int:p2_id>', methods=['GET', 'POST'])
-def add_appointment(p2_id):
-    form = AddAppointmentForm()
-    if form.validate_on_submit():
-        if current_user.user_type == "HR-менеджер":
-            hr = current_user.id
-            finder = p2_id
-        else:
-            hr = p2_id
-            finder = current_user.id
-        post(PATH + "/api/appointment",
-             json={"message": form.message.data,
-                   "date": form.date.data.strftime("%Y-%m-%d"),
-                   "time": form.time.data.strftime("%H:%M"),
-                   "platform": form.platform.data,
-                   "link": form.link.data,
-                   "hr": hr,
-                   "finder": finder})
-        return redirect('/')
-    return render_template('add_appointment.html', form=form)
 
 
 if __name__ == '__main__':
