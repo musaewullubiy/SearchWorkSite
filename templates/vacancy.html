@@ -4,11 +4,16 @@
 
 <section class="section-padding bg-gray" style="min-height: 730px">
     <h2>{{ vacancy.title }}</h2>
-    <h5>{{ vacancy.salary }}</h5>
+    <div class="row" style="margin: 10px">
+    <h5 class="col">{{ vacancy.salary }}<h5>
+        {% if current_user.user_type == 'Соискатель' %}
+            <a href="/add-appointment/{{ vacancy.hr_manager }}" class="btn btn-primary">
+                Откликнуться
+            </a>
+        {% endif %}
+    </div>
     <p>{{ vacancy.text }}</p>
-    {% if current_user.user_type == 'Соискатель' %}
-        <a href="/add-appointment/{{ vacancy.hr_manager }}">Откликнуться</a>
-    {% endif %}
+
 </section>
 
 {% endblock %}

@@ -9,6 +9,7 @@ from data import vacancy_resources
 from data import projects_resources
 from data import appointment_recource
 
+from forms.add_appointment import AddAppointmentForm
 from forms.authorization import AuthorizationForm
 from forms.register import RegisterForm
 from forms.search import SearchForm
@@ -203,6 +204,29 @@ def search_page(search_text):
         data = set(db_sess.query(Vacancy).filter(Vacancy.tags.like(f'%{i.lower()}%')).all())
         results = results | data
     return render_template('search_page.html', results=results, form=form)
+
+
+@app.route('/add-appointment/<int:point_id>', methods=['GET', 'POST'])
+@login_required
+def add_appointment(point_id):
+    form = AddAppointmentForm()
+    if form.validate_on_submit():
+        if current_user.user_type == "HR-менеджер":
+            hr_man = current_user.id
+            finder = point_id
+        else:
+            hr_man = point_id
+            finder = current_user.id
+        post(PATH + "/api/appointment",
+             json={"message": form.message.data,
+                   "date": form.date.data.strftime("%Y-%m-%d"),
+                   "time": form.time.data.strftime("%H:%M"),
+                   "platform": form.platform.data,
+                   "link": form.link.data,
+                   "hr": hr_man,
+                   "finder": finder})
+        return redirect('/')
+    return render_template('add_appointment.html', form=form)
 
 
 if __name__ == '__main__':

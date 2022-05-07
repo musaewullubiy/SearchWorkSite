@@ -19,7 +19,10 @@
     <p class="alert alert-danger" role="alert">{{ error }}</p>
     {% endfor %}
     </p>
-    <p>{{ form.remember_me() }} {{ form.remember_me.label }}</p>
+    <div class="row">
+        <p class="col">{{ form.remember_me() }} {{ form.remember_me.label }}</p>
+        <a class="col-md-4" href="/register">Нет аккаунта? Зарегайся здесь и сейчас</a>
+    </div>
     <p>{{ form.submit(type="submit", class="btn btn-primary") }}</p>
     {{ message }}
 </form>
