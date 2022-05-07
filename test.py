@@ -1,6 +1,4 @@
-from requests import post
+data = 'abccaba'
 
-
-print(post('http://localhost:5000/api/users', json={
-    ''
-}))
+for i in range(0, len(data), 3):
+    print(data[i: i + 3])

@@ -1,5 +1,5 @@
 {% extends "base.html" %} {% block content %}
-  <section class="section-padding bg-gray">
+  <section class="section-padding bg-gray" style="min-height: 730px">
     <div class="container">
       <div class="section-intro text-center pb-90px">
         <h2>{{ user.name }} {{ user.surname }}</h2>
@@ -8,7 +8,7 @@
       <div class="row">
         <h1 class="col">Инфо:</h1>
         {% if current_user.id == user.id %}
-          <a class="col-md-2 button calendar-button text-center" href="/add/about">Добавить</a>
+          <a class="col-md-2 button calendar-button text-center" href="/add-about">Добавить</a>
         {% endif %}
       </div>
       <div class="user-info-div">
@@ -19,11 +19,12 @@
       <div class="row">
         <h1 class="col">Проекты:</h1>
         {% if current_user.id == user.id %}
-          <a class="col-md-2 button calendar-button text-center" href="/add/project">Добавить</a>
+          <a class="col-md-2 button calendar-button text-center" href="/add-project">Добавить</a>
         {% endif %}
       </div>
-      <div class="row">
-          {% for project in projects %}
+      {% for i in range(0, projects|length, 3) %}
+        <div class="row">
+          {% for project in projects[i: i + 3] %}
             <div class="col-md-6 col-lg-4 mb-4 mb-lg-0">
               <div class="card-blog">
                 <div class="card-blog-body">
@@ -41,6 +42,7 @@
           </div>
           {% endfor %}
         </div>
+        {% endfor %}
       <a class="button calendar-button text-center" href="/calendar">Календарь</a>
       </div>
     </div>

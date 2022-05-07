@@ -109,14 +109,15 @@ def profile_page(user_id):
     user = db_sess.query(User).filter(User.id == user_id).first()
     if user:
         if user.user_type == 'HR-менеджер':
-            return render_template('hr_profile.html', user=user)
+            vacancies = list(db_sess.query(Vacancy).filter(Vacancy.hr_manager == user_id))
+            return render_template('hr_profile.html', user=user, vacancies=vacancies)
         elif user.user_type == 'Соискатель':
-            projects = db_sess.query(Project).filter(Project.developer_id == user_id)
+            projects = list(db_sess.query(Project).filter(Project.developer_id == user_id))
             return render_template('user_profile.html', user=user, projects=projects)
     return '404'
 
 
-@app.route('/addvacancy', methods=["GET", "POST"])
+@app.route('/add-vacancy', methods=["GET", "POST"])
 @login_required
 def add_vacancy():
     form = VacancyForm()
@@ -132,7 +133,7 @@ def add_vacancy():
     return render_template("add_vacancy.html", title="Adding a vacancy", form=form)
 
 
-@app.route('/add/about', methods=['GET', 'POST'])
+@app.route('/add-about', methods=['GET', 'POST'])
 @login_required
 def add_about_page():
     form = AddAboutForm()
@@ -144,7 +145,7 @@ def add_about_page():
     return render_template('add_about.html', form=form)
 
 
-@app.route('/add/project', methods=['GET', 'POST'])
+@app.route('/add-project', methods=['GET', 'POST'])
 @login_required
 def add_project_page():
     form = AddProjectForm()

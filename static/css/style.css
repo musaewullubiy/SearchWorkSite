@@ -40,11 +40,6 @@ body {
 }
 
 
-#container-main {
-  min-height: 700px;
-}
-
-
 a {
   color: Black;
 }
@@ -175,8 +170,7 @@ h3, .h3 {
 
 .header_area .navbar {
   background: transparent;
-  border: 0px;
-  border-radius: 0px;
+  outline: #ebebff solid 2px;
   width: 100%;
   padding-top: 0;
   padding-bottom: 0;
@@ -2091,6 +2085,10 @@ button.button {
 
 .footer-text a, .footer-text i {
   color: #6059f6;
+}
+
+.row {
+  margin-bottom: 1.5em!important
 }
 
 /* footer style end
