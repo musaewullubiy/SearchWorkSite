@@ -9,6 +9,7 @@ from data import projects_resources
 
 from forms.authorization import AuthorizationForm
 from forms.register import RegisterForm
+from forms.search import SearchForm
 from forms.add_about import AddAboutForm
 from forms.add_project import AddProjectForm
 from forms.vacancy import VacancyForm
@@ -58,9 +59,13 @@ def main():
     app.run()
 
 
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 def index():
-    return render_template('index.html', title="searchwork")
+    form = SearchForm()
+    if form.validate_on_submit():
+        print(form.search_text.data)
+        return redirect(f'/{form.search_text.data}/')
+    return render_template('index.html', title="searchwork", form=form)
 
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -114,6 +119,16 @@ def profile_page(user_id):
         elif user.user_type == 'Соискатель':
             projects = list(db_sess.query(Project).filter(Project.developer_id == user_id))
             return render_template('user_profile.html', user=user, projects=projects)
+    return '404'
+
+
+@app.route('/vacancy/<int:vacancy_id>')
+@login_required
+def vacancy_page(vacancy_id):
+    db_sess = db_session.create_session()
+    vacancy = db_sess.query(Vacancy).filter(Vacancy.id == vacancy_id).first()
+    if vacancy:
+        return render_template('vacancy.html', vacancy=vacancy)
     return '404'
 
 
@@ -172,14 +187,17 @@ def delete_project(project_id):
     return redirect(f'/profile/{current_user.id}')
 
 
-@app.route('/search/<string:search_text>')
+@app.route('/search/<string:search_text>', methods=['GET', 'POST'])
 def search_page(search_text):
+    form = SearchForm()
+    if form.validate_on_submit():
+        return redirect(f'/search/{form.search_text.data}')
     results = list()
     db_sess = db_session.create_session()
     for i in search_text.split():
         data = db_sess.query(Vacancy).filter(Vacancy.tags.like(f'%{i}%')).all()
         results += data
-    return render_template('search_page.html', results=results)
+    return render_template('search_page.html', results=results, form=form)
 
 
 if __name__ == '__main__':

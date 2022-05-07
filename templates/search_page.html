@@ -2,7 +2,35 @@
 
 {% block content %}
 
+<section class="section-padding bg-gray" style="min-height: 730px">
+    <div>
+        <h4 style="text-align: center">Поиск</h4>
+        <form action="" method="post" class="row" style="margin: 0 auto; max-width: 820px">
+            {{ form.hidden_tag() }}
+            <p class="col">
+                {{ form.search_text(class="form-control col", type="text") }}<br>
+                {% for error in form.search_text.errors %}
+            <p class="alert alert-danger" role="alert">{{ error }}</p>
+            {% endfor %}
+            </p>
+            <p class="col-md-2">{{ form.submit(type="submit", class="btn btn-primary") }}</p>
+            {{ message }}
+        </form>
+    </div>
   {% for result in results %}
-    <p>{{ result.text }}</p>
+      <div class="testimonial__item">
+          <a class="row" href="/vacancy/{{ result.id }}">
+              <div class="col-md-9 col-lg-10">
+                  <div class="testimonial__content mt-3 mt-sm-0">
+                      <h3>{{ result.tags }}</h3>
+                      <p>{{ result.salary }}</p>
+                      <p class="testimonial__i">{{ result.text[:70] }}</p>
+                      <span class="testimonial__icon"><i class="ti-quote-right"></i></span>
+                  </div>
+              </div>
+          </a>
+      </div>
   {% endfor %}
+</section>
+
 {% endblock %}

@@ -88,16 +88,17 @@
             <h3>Поиск вакансии</h3>
 
             <form class="search-form" action="#">
+              {{ form.hidden_tag() }}
               <div class="form-group">
                 <div class="input-group">
-                  <input type="text" class="form-control" placeholder="Я ищу...">
+                  {{ form.search_text(class="form-control col", type="text", placeholder='Я ищу...') }}
                   <div class="input-group-append">
                     <span class="input-group-text"><i class="ti-search"></i></span>
                   </div>
                 </div>
               </div>
               <div class="form-group">
-                <button class="button border-0 mt-3" type="submit">Погнали!</button>
+                {{ form.submit(type="submit", class="button border-0 mt-3") }}
               </div>
             </form>
           </div>
