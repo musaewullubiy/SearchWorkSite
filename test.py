@@ -1,4 +1,7 @@
-data = 'abccaba'
+from requests import post, get, delete
 
-for i in range(0, len(data), 3):
-    print(data[i: i + 3])
+print(delete('http://127.0.0.1:5000/api/appointment/1').json())
+
+print(post('http://localhost:5000/api/users', json={
+    ''
+}))

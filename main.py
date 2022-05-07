@@ -6,13 +6,16 @@ from requests import post, get, put, delete
 from data import users_resources
 from data import vacancy_resources
 from data import projects_resources
+from data import appointment_recource
+from forms.add_appointment import AddAppointmentForm
 
 from forms.authorization import AuthorizationForm
 from forms.register import RegisterForm
 from forms.search import SearchForm
 from forms.add_about import AddAboutForm
 from forms.add_project import AddProjectForm
-from forms.vacancy import VacancyForm
+from forms.add_vacancy import VacancyForm
+from forms.poisk_form import PoiskForm
 
 from data.users import User
 from data.projects import Project
@@ -20,9 +23,7 @@ from data.vacancies import Vacancy
 
 from data import db_session
 
-
-PATH = 'http://localhost:5000'
-
+PATH = 'http://127.0.0.1:5000'
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
@@ -55,6 +56,9 @@ def main():
 
     api.add_resource(projects_resources.ProjectResource, "/api/project/<int:project_id>")
     api.add_resource(projects_resources.ProjectListResource, "/api/project")
+
+    api.add_resource(appointment_recource.AppointmentResource, "/api/appointment/<int:appointment_id>")
+    api.add_resource(appointment_recource.AppointmentListResource, "/api/appointment")
 
     app.run()
 
@@ -138,7 +142,8 @@ def add_vacancy():
     form = VacancyForm()
     if form.validate_on_submit():
         post(PATH + "/api/vacancy",
-             json={"tags": form.tags.data,
+             json={"title": form.title.data,
+                   "tags": form.tags.data.lower(),
                    "text": form.text.data,
                    "salary": form.salary.data,
                    "is_actual": form.is_actual.data,
@@ -192,12 +197,35 @@ def search_page(search_text):
     form = SearchForm()
     if form.validate_on_submit():
         return redirect(f'/search/{form.search_text.data}')
-    results = list()
+    results = set()
     db_sess = db_session.create_session()
     for i in search_text.split():
-        data = db_sess.query(Vacancy).filter(Vacancy.tags.like(f'%{i}%')).all()
-        results += data
+        data = set(db_sess.query(Vacancy).filter(Vacancy.tags.like(f'%{i.lower()}%')).all())
+        results = results | data
     return render_template('search_page.html', results=results, form=form)
+
+
+@login_required
+@app.route('/add-appointment/<int:p2_id>', methods=['GET', 'POST'])
+def add_appointment(p2_id):
+    form = AddAppointmentForm()
+    if form.validate_on_submit():
+        if current_user.user_type == "HR-менеджер":
+            hr = current_user.id
+            finder = p2_id
+        else:
+            hr = p2_id
+            finder = current_user.id
+        post(PATH + "/api/appointment",
+             json={"message": form.message.data,
+                   "date": form.date.data.strftime("%Y-%m-%d"),
+                   "time": form.time.data.strftime("%H:%M"),
+                   "platform": form.platform.data,
+                   "link": form.link.data,
+                   "hr": hr,
+                   "finder": finder})
+        return redirect('/')
+    return render_template('add_appointment.html', form=form)
 
 
 if __name__ == '__main__':

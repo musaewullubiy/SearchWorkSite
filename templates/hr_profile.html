@@ -1,5 +1,5 @@
 {% extends "base.html" %} {% block content %}
-<section class="section-padding bg-gray" style="min-height: 730px">
+<section class="section-padding bg-gray">
     <div class="container">
         <div class="testimonial__item">
             <div class="row">
@@ -12,7 +12,8 @@
                     <div class="testimonial__content mt-3 mt-sm-0">
                         <h3>{{ user.name }} {{ user.surname }}</h3>
                         <p>{{ user.user_type }}</p>
-                        <p class="testimonial__i">{{ user.age }} лет, Los Angeles: "Я считаю, что лезгины стащили наш хинкал"</p>
+                        <p class="testimonial__i">{{ user.age }} лет, Los Angeles: "Я считаю, что лезгины стащили наш
+                            хинкал"</p>
                         <span class="testimonial__icon"><i class="ti-quote-right"></i></span>
                     </div>
                 </div>
@@ -29,15 +30,14 @@
             <div class="row">
                 <div class="col-md-9 col-lg-10">
                     <div class="testimonial__content mt-3 mt-sm-0">
-                        <h3>{{ vacancy.tags }}</h3>
-                        <p>{{ vacancy.salary }}</p>
-                        <p class="testimonial__i">{{ vacancy.text[:70] }}</p>
+                        <h3>Python разраб</h3>
+                        <p>30 000</p>
+                        <p class="testimonial__i">Требуется Python разработчик в компанию Apple, навы...</p>
                         <span class="testimonial__icon"><i class="ti-quote-right"></i></span>
                     </div>
                 </div>
             </div>
         </div>
-        {% endfor %}
     </div>
 </section>
 {% endblock %}
