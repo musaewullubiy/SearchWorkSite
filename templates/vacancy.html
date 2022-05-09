@@ -3,16 +3,16 @@
 {% block content %}
 
 <section class="section-padding bg-gray" style="min-height: 730px">
-    <h2>{{ vacancy.title }}</h2>
-    <div class="row" style="margin: 10px">
-    <h5 class="col">{{ vacancy.salary }}<h5>
-        {% if current_user.user_type == 'Соискатель' %}
-            <a href="/add-appointment/{{ vacancy.hr_manager }}" class="btn btn-primary">
-                Откликнуться
-            </a>
-        {% endif %}
-    </div>
-    <p>{{ vacancy.text }}</p>
+    <h2 class="text-center">{{ vacancy.title }}</h2>
+    <h5 class="text-center text-success">Зарплата: {{ vacancy.salary }}</h5>
+    <p class="text-center bg-white" style="margin: 0em 4em 12em 4em; border-radius: 15%; padding: 2.5em;">
+        {{ vacancy.text.capitalize() }}
+    </p>
+    {% if current_user.user_type == 'Соискатель' %}
+        <a href="/add-appointment/{{ vacancy.hr_manager }}" class="col btn btn-primary" style="margin: 0 auto">
+            Откликнуться
+        </a>
+    {% endif %}
 
 </section>
 

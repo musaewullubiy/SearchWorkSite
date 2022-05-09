@@ -14,6 +14,7 @@ class Appointments(SqlAlchemyBase, SerializerMixin):
     datetime = sqlalchemy.Column(sqlalchemy.DateTime, nullable=True)  # дата собес-ния
     platform = sqlalchemy.Column(sqlalchemy.String, default="Discord")  # платформа для собеседования
     link = sqlalchemy.Column(sqlalchemy.String, nullable=True)  # ссылка на профиль
-    hr = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey("users.id"))  #  id отправляющего заявку на собеседования
-    finder = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey("users.id"))  #  id принимающегт заявку на собеседования
-    is_actual = sqlalchemy.Column(sqlalchemy.Boolean, default=True)  #  актуальность
+    hr = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey("users.id"))  # id отправляющего заявку на собеседования
+    finder = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey("users.id"))  # id принимающегт заявку на собеседования
+    is_actual = sqlalchemy.Column(sqlalchemy.Boolean, default=True)  # актуальность
+    status = sqlalchemy.Column(sqlalchemy.Boolean, default=False)  # статус: принята, нет

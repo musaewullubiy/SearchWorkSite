@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/all.min.css') }}">
 
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    {% block styles %} {% endblock %}
 </head>
 <body class="bg-shape">
 <header class="header_area">
@@ -30,7 +31,7 @@
                 <div class="collapse navbar-collapse offset" id="navbarSupportedContent">
                     <ul class="nav navbar-nav menu_nav justify-content-end" style="margin-right: 5%;">
                         <li class="nav-item"><a class="nav-link" href="/">О нас</a></li>
-                        <li class="nav-item"><a class="nav-link">Соискателю</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/search">Поиск</a></li>
                         <li class="nav-item"><a class="nav-link">HR-менеджеру</a></li>
                     </ul>
                     {% if not current_user.is_authenticated %}

@@ -1,6 +1,8 @@
 from requests import post, get, put, delete
+import calendar
+from datetime import datetime
 
-from flask import Flask, render_template, redirect
+from flask import Flask, render_template, redirect, abort
 from flask_login import LoginManager, logout_user, login_required, login_user, current_user
 from flask_restful import Api
 
@@ -20,6 +22,7 @@ from forms.add_vacancy import VacancyForm
 from data.users import User
 from data.projects import Project
 from data.vacancies import Vacancy
+from data.appointments import Appointments
 
 from data import db_session
 
@@ -30,6 +33,11 @@ app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
 login_manager = LoginManager()
 login_manager.init_app(app)
 api = Api(app)
+
+
+@app.errorhandler(404)
+def not_found(error):
+    return render_template('404.html')
 
 
 @login_manager.user_loader
@@ -66,10 +74,8 @@ def main():
 @app.route('/', methods=['GET', 'POST'])
 def index():
     form = SearchForm()
-    print(form.validate_on_submit())
     if form.validate_on_submit():
         string = form.search_text.data
-        print(string)
         return redirect(f'/search/{form.search_text.data}')
     return render_template('index.html', title="searchwork", form=form)
 
@@ -125,7 +131,7 @@ def profile_page(user_id):
         elif user.user_type == 'Соискатель':
             projects = list(db_sess.query(Project).filter(Project.developer_id == user_id))
             return render_template('user_profile.html', user=user, projects=projects)
-    return '404'
+    return abort(404)
 
 
 @app.route('/vacancy/<int:vacancy_id>')
@@ -134,7 +140,7 @@ def vacancy_page(vacancy_id):
     vacancy = db_sess.query(Vacancy).filter(Vacancy.id == vacancy_id).first()
     if vacancy:
         return render_template('vacancy.html', vacancy=vacancy)
-    return '404'
+    return abort(404)
 
 
 @app.route('/add-vacancy', methods=["GET", "POST"])
@@ -159,9 +165,9 @@ def add_vacancy():
 def add_about_page():
     form = AddAboutForm()
     if form.validate_on_submit():
-        user = get(f'http://localhost:5000/api/users/{current_user.id}').json()['user']
+        user = get(PATH + f'/api/users/{current_user.id}').json()['user']
         user['about'] = form.text.data
-        put(f'http://localhost:5000/api/users/{current_user.id}', json=user)
+        put(PATH + f'/api/users/{current_user.id}', json=user)
         return redirect(f'/profile/{current_user.id}')
     return render_template('add_about.html', form=form)
 
@@ -194,7 +200,7 @@ def delete_project(project_id):
 
 
 @app.route('/search/<string:search_text>', methods=['GET', 'POST'])
-def search_page(search_text):
+def search_page_2(search_text):
     form = SearchForm()
     if form.validate_on_submit():
         return redirect(f'/search/{form.search_text.data}')
@@ -203,7 +209,15 @@ def search_page(search_text):
     for i in search_text.split():
         data = set(db_sess.query(Vacancy).filter(Vacancy.tags.like(f'%{i.lower()}%')).all())
         results = results | data
-    return render_template('search_page.html', results=results, form=form)
+    return render_template('search_page.html', search_text=search_text, results=results, form=form)
+
+
+@app.route('/search', methods=['GET', 'POST'])
+def search_page_1():
+    form = SearchForm()
+    if form.validate_on_submit():
+        return redirect(f'/search/{form.search_text.data}')
+    return render_template('search_page.html', form=form)
 
 
 @app.route('/add-appointment/<int:point_id>', methods=['GET', 'POST'])
@@ -227,6 +241,64 @@ def add_appointment(point_id):
                    "finder": finder})
         return redirect('/')
     return render_template('add_appointment.html', form=form)
+
+
+def calc_calender(date):
+    year = date.year
+    yearInfo = dict()
+    for month in range(1, 13):
+        days = calendar.monthcalendar(year, month)
+        if len(days) != 6:
+            days.append([0 for _ in range(7)])
+        month_addr = calendar.month_abbr[month]
+        yearInfo[month_addr] = days
+    return yearInfo
+
+
+@app.route('/calendar')
+@login_required
+def calendar_page():
+    date = datetime.today()
+    this_month = calendar.month_abbr[date.month]
+    months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+    session = db_session.create_session()
+    if current_user.user_type == 'HR-менеджер':
+        data = session.query(Appointments).filter(Appointments.hr == current_user.id, Appointments.status == 1).all()
+    else:
+        data = session.query(Appointments).filter(Appointments.finder == current_user.id).all()
+    appointments_date = []
+    for i in data:
+        appointments_date.append((months[i.datetime.month - 1], i.datetime.day))
+    return render_template('calendar.html', this_month=this_month, date=date, content=calc_calender(date),
+                           appointments_date=appointments_date, data=data)
+
+
+@app.route('/applications')
+@login_required
+def application_page():
+    sess = db_session.create_session()
+    applications = sess.query(Appointments).filter(Appointments.hr == current_user.id, Appointments.status == 0).all()
+    return render_template('application_page.html', applications=applications)
+
+
+@app.route('/application/apply/<int:app_id>')
+@login_required
+def application_apply_page(app_id):
+    sess = db_session.create_session()
+    application = sess.query(Appointments).filter(Appointments.id == app_id).first()
+    application.status = 1
+    sess.commit()
+    return redirect('/applications')
+
+
+@app.route('/application/cancel/<int:app_id>')
+@login_required
+def application_cancel_page(app_id):
+    sess = db_session.create_session()
+    application = sess.query(Appointments).filter(Appointments.id == app_id).first()
+    sess.delete(application)
+    sess.commit()
+    return redirect('/applications')
 
 
 if __name__ == '__main__':

@@ -12,8 +12,14 @@
                     <div class="testimonial__content mt-3 mt-sm-0">
                         <h3>{{ user.name }} {{ user.surname }}</h3>
                         <p>{{ user.user_type }}</p>
-                        <p class="testimonial__i">{{ user.age }} лет, Los Angeles: "Я считаю, что лезгины стащили наш
-                            хинкал"</p>
+                        <div class="row">
+                            <p class="testimonial__i col">{{ user.age }} лет: {{ user.about }}</p>
+                            {% if user.id == current_user.id %}
+                            <a class="col-md-2 button calendar-button text-center" href="/add-about">
+                                Изменить
+                            </a>
+                            {% endif %}
+                        </div>
                         <span class="testimonial__icon"><i class="ti-quote-right"></i></span>
                     </div>
                 </div>
@@ -25,6 +31,9 @@
           <a class="col-md-2 button calendar-button text-center" href="/add-vacancy">Добавить</a>
         {% endif %}
       </div>
+        {% if not vacancies %}
+        <p>Ничего пока-что нет</p>
+        {% endif %}
         {% for vacancy in vacancies %}
         <div class="testimonial__item">
             <div class="row">
@@ -39,6 +48,8 @@
             </div>
         </div>
         {% endfor %}
+        <a class="button calendar-button text-center" href="/calendar">Календарь</a>
+        <a class="button calendar-button text-center" href="/applications">Заявки</a>
     </div>
 </section>
 {% endblock %}

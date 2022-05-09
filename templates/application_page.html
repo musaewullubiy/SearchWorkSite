@@ -1,0 +1,24 @@
+{% extends "base.html" %} {% block content %}
+<h4 class="text-center">Ваши заявки на собеседование:</h4>
+<section class="section-padding bg-gray" style="min-height: 730px">
+    {% if not data %}
+    <p class="text-center">Заявок нет</p>
+    {% endif %}
+    {% for result in applications %}
+    <div class="testimonial__item" style="background: #dee2e6">
+        <div class="col-md-9 col-lg-10">
+            <div class="testimonial__content mt-3 mt-sm-0">
+                <div class="row">
+                    <h3 class="col">Заявка на собеседование: {{ result.datetime.strftime("%Y-%m-%d %H:%M") }}</h3>
+                    <a class="col-md-2 btn btn-primary" href="/application/apply/{{ result.id }}">Принять</a>
+                    <a class="col-md-2 btn btn-danger" href="/application/cancel/{{ result.id }}">Отклонить</a>
+                </div>
+                <p>{{ result.platform }} {{ result.link }}</p>
+                <p class="testimonial__i">{{ result.message }}</p>
+                <span class="testimonial__icon"><i class="ti-quote-right"></i></span>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</section>
+{% endblock %}

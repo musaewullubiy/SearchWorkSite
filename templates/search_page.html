@@ -8,7 +8,7 @@
         <form action="" method="post" class="row" style="margin: 0 auto; max-width: 820px">
             {{ form.hidden_tag() }}
             <p class="col">
-                {{ form.search_text(class="form-control col", type="text") }}<br>
+                {{ form.search_text(class="form-control col", type="text", value=search_text) }}<br>
                 {% for error in form.search_text.errors %}
             <p class="alert alert-danger" role="alert">{{ error }}</p>
             {% endfor %}
@@ -17,20 +17,30 @@
             {{ message }}
         </form>
     </div>
-  {% for result in results %}
-      <div class="testimonial__item">
-          <a class="row" href="/vacancy/{{ result.id }}">
-              <div class="col-md-9 col-lg-10">
-                  <div class="testimonial__content mt-3 mt-sm-0">
-                      <h3>{{ result.tags }}</h3>
-                      <p>{{ result.salary }}</p>
-                      <p class="testimonial__i">{{ result.text[:70] }}</p>
-                      <span class="testimonial__icon"><i class="ti-quote-right"></i></span>
-                  </div>
-              </div>
-          </a>
-      </div>
-  {% endfor %}
+    {% if not results %}
+    <div class="testimonial__item">
+        <h4>Ничего не найдено(</h4>
+    </div>
+    {% endif %}
+    {% for result in results %}
+    <div class="testimonial__item">
+        <a class="row" href="/vacancy/{{ result.id }}">
+            <div class="col-md-9 col-lg-10">
+                <div class="testimonial__content mt-3 mt-sm-0">
+                    <h3>{{ result.title.capitalize() }}</h3>
+                    <p>{{ result.salary }}</p>
+                    <p class="testimonial__i">{{ result.text[:150].capitalize() }}</p>
+                    <span class="testimonial__icon"><i class="ti-quote-right"></i></span>
+                </div>
+            </div>
+            {% if current_user.user_type == 'Соискатель' %}
+                <a href="/add-appointment/{{ result.hr_manager }}" class="btn btn-primary">
+                    Откликнуться
+                </a>
+            {% endif %}
+        </a>
+    </div>
+    {% endfor %}
 </section>
 
 {% endblock %}
