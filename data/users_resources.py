@@ -45,7 +45,7 @@ class UsersResource(Resource):
         user.about = args['about']
         user.age = args['age']
         user.email = args['email']
-        user.hashed_password = args['hashed_password']
+        user.hashed_password = generate_password_hash(args['hashed_password'])
         user.user_type = args['user_type']
         session.commit()
         return jsonify({'success': 'OK'})

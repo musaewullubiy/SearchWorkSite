@@ -2,7 +2,7 @@ from requests import post, get, put, delete
 import calendar
 from datetime import datetime
 
-from flask import Flask, render_template, redirect, abort, request
+from flask import Flask, render_template, redirect, abort, request, url_for
 from flask_login import LoginManager, logout_user, login_required, login_user, current_user
 from flask_restful import Api
 
@@ -12,6 +12,7 @@ from data import projects_resources
 from data import appointment_recource
 
 from forms.add_appointment import AddAppointmentForm
+from forms.add_user_photo import AddPhotoForm
 from forms.authorization import AuthorizationForm
 from forms.register import RegisterForm
 from forms.search import SearchForm
@@ -134,6 +135,12 @@ def profile_page(user_id):
     return abort(404)
 
 
+@app.route('/profile')
+@login_required
+def user_profile_page():
+    return redirect(f"profile/{current_user.id}")
+
+
 @app.route('/vacancy/<int:vacancy_id>')
 def vacancy_page(vacancy_id):
     db_sess = db_session.create_session()
@@ -247,14 +254,14 @@ def add_appointment(user_id):
 
 def calc_calender(date):
     year = date.year
-    yearInfo = dict()
+    year_info = dict()
     for month in range(1, 13):
         days = calendar.monthcalendar(year, month)
         if len(days) != 6:
             days.append([0 for _ in range(7)])
         month_addr = calendar.month_abbr[month]
-        yearInfo[month_addr] = days
-    return yearInfo
+        year_info[month_addr] = days
+    return year_info
 
 
 @app.route('/calendar')
@@ -279,7 +286,13 @@ def calendar_page():
 @login_required
 def application_page():
     sess = db_session.create_session()
-    applications = sess.query(Appointments).filter(Appointments.hr == current_user.id, Appointments.status == 0).all()
+    if current_user.user_type == "HR-менеджер":
+        applications = sess.query(Appointments).filter(Appointments.hr == current_user.id,
+                                                       Appointments.status == 0).all()
+    else:
+        applications = sess.query(Appointments).filter(Appointments.finder == current_user.id,
+                                                       Appointments.status == 0).all()
+
     return render_template('application_page.html', applications=applications)
 
 
@@ -301,6 +314,23 @@ def application_cancel_page(app_id):
     sess.delete(application)
     sess.commit()
     return redirect('/applications')
+
+
+@app.route('/profile/add-photo', methods=['GET', 'POST'])
+@login_required
+def add_profile_photo_page():
+    form = AddPhotoForm()
+    if form.validate_on_submit():
+        sess = db_session.create_session()
+        user = sess.query(User).get(current_user.id)
+        photo = form.add_photo.data
+        name = f"{user.id}.{photo.filename.split('.')[-1]}"
+        path = url_for("static", filename=f"profile-img")[1:]
+        photo.save(path + "/" + name)
+        user.photo = name
+        sess.commit()
+        return redirect(f'/profile/{current_user.id}')
+    return render_template('add_photo.html', form=form)
 
 
 if __name__ == '__main__':

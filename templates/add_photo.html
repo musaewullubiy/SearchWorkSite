@@ -2,15 +2,15 @@
 
 {% block content %}
 <div style="min-height: 730px">
-    <h1>Добавьте информацию</h1>
-    <form action="" method="post">
+    <h1>Изменить фотографию</h1>
+    <form action="" method="post" enctype="multipart/form-data">
         {{ form.hidden_tag() }}
         <p>
             {{ form.add_photo.label }}<br>
-            {{ form.add_photo(class="form-control", type="text", style="min-height: 500px") }}<br>
+            {{ form.add_photo(class="form-control") }}<br>
             {% for error in form.add_photo.errors %}
-        <p class="alert alert-danger" role="alert">{{ error }}</p>
-        {% endfor %}
+                <p class="alert alert-danger" role="alert">{{ error }}</p>
+            {% endfor %}
         </p>
         <p>{{ form.submit(type="submit", class="btn btn-primary") }}</p>
         {{message}}
