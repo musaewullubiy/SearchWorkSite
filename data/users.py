@@ -22,6 +22,7 @@ class User(SqlAlchemyBase, UserMixin, SerializerMixin):
     modified_date = sqlalchemy.Column(sqlalchemy.DateTime,
                                       default=datetime.datetime.now())
     user_type = sqlalchemy.Column(sqlalchemy.String, nullable=True)
+    photo = sqlalchemy.Column(sqlalchemy.String, default="default.jpg")
     vacancies = orm.relation('Vacancy', back_populates='user')
     projects = orm.relation('Project', back_populates='user')
 

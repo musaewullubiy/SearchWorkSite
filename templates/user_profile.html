@@ -2,6 +2,7 @@
   <section class="section-padding bg-gray" style="min-height: 730px">
     <div class="container">
       <div class="section-intro text-center pb-90px">
+        <img src="{{ url_for('static', filename='profile-img/' + user.photo) }}">
         <h2>{{ user.name }} {{ user.surname }}</h2>
         <p>{{ user.user_type }}</p>
       </div>
