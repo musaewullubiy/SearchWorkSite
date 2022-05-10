@@ -76,7 +76,6 @@ def main():
 def index():
     form = SearchForm()
     if form.validate_on_submit():
-        string = form.search_text.data
         return redirect(f'/search/{form.search_text.data}')
     return render_template('index.html', title="searchwork", form=form)
 
