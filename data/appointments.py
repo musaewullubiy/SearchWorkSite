@@ -10,6 +10,7 @@ class Appointments(SqlAlchemyBase, SerializerMixin):
 
     id = sqlalchemy.Column(sqlalchemy.Integer,
                            primary_key=True, autoincrement=True)  # id собес-ния
+    vacancy_id = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey("vacancies.id"))
     message = sqlalchemy.Column(sqlalchemy.Text, nullable=True)  # сообщение
     datetime = sqlalchemy.Column(sqlalchemy.DateTime, nullable=True)  # дата собес-ния
     platform = sqlalchemy.Column(sqlalchemy.String, default="Discord")  # платформа для собеседования

@@ -9,11 +9,13 @@
         <div class="col-md-9 col-lg-10">
             <div class="testimonial__content mt-3 mt-sm-0">
                 <div class="row">
-                    <h3 class="col">Заявка на собеседование: {{ result.datetime.strftime("%Y-%m-%d %H:%M") }}</h3>
+                    <h3 class="col">Заявка на собеседование: {{ result.vacancy_id }}</h3>
                     <a class="col-md-2 btn btn-primary" href="/application/apply/{{ result.id }}">Принять</a>
                     <a class="col-md-2 btn btn-danger" href="/application/cancel/{{ result.id }}">Отклонить</a>
                 </div>
                 <p>{{ result.platform }} {{ result.link }}</p>
+                <a href="/vacancy/{{ result.vacancy_id }}">Ссылка на вакансию</a>
+                <a href="/profile/{{ result.finder }}">Ссылка на профиль соискателя</a>
                 <p class="testimonial__i">{{ result.message }}</p>
                 <span class="testimonial__icon"><i class="ti-quote-right"></i></span>
             </div>

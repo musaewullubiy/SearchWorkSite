@@ -9,7 +9,7 @@
         {{ vacancy.text.capitalize() }}
     </p>
     {% if current_user.user_type == 'Соискатель' %}
-        <a href="/add-appointment/{{ vacancy.hr_manager }}" class="col btn btn-primary" style="margin: 0 auto">
+        <a href="/add-appointment/{{ vacancy.hr_manager }}?vacancy_id={{ vacancy.id }}" class="col btn btn-primary" style="margin: 0 auto">
             Откликнуться
         </a>
     {% endif %}

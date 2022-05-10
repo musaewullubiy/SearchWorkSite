@@ -2,7 +2,7 @@ from requests import post, get, put, delete
 import calendar
 from datetime import datetime
 
-from flask import Flask, render_template, redirect, abort
+from flask import Flask, render_template, redirect, abort, request
 from flask_login import LoginManager, logout_user, login_required, login_user, current_user
 from flask_restful import Api
 
@@ -220,16 +220,17 @@ def search_page_1():
     return render_template('search_page.html', form=form)
 
 
-@app.route('/add-appointment/<int:point_id>', methods=['GET', 'POST'])
+@app.route('/add-appointment/<int:user_id>', methods=['GET', 'POST'])
 @login_required
-def add_appointment(point_id):
+def add_appointment(user_id):
+    vacancy_id = request.args.get('vacancy_id')
     form = AddAppointmentForm()
     if form.validate_on_submit():
         if current_user.user_type == "HR-менеджер":
             hr_man = current_user.id
-            finder = point_id
+            finder = user_id
         else:
-            hr_man = point_id
+            hr_man = user_id
             finder = current_user.id
         post(PATH + "/api/appointment",
              json={"message": form.message.data,
@@ -238,7 +239,8 @@ def add_appointment(point_id):
                    "platform": form.platform.data,
                    "link": form.link.data,
                    "hr": hr_man,
-                   "finder": finder})
+                   "finder": finder,
+                   "vacancy_id": vacancy_id})
         return redirect('/')
     return render_template('add_appointment.html', form=form)
 

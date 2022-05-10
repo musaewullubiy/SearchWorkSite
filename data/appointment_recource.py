@@ -22,7 +22,7 @@ class AppointmentResource(Resource):
         appointment = session.query(Appointments).get(appointment_id)
 
         return jsonify({'appointment': appointment.to_dict(
-            only=('message', 'datetime', 'platform', 'link', 'hr', 'finder', 'is_actual'))})
+            only=('vacancy_id', 'message', 'datetime', 'platform', 'link', 'hr', 'finder', 'is_actual'))})
 
     def delete(self, appointment_id):
         abort_if_appointment_not_found(appointment_id)
@@ -38,7 +38,7 @@ class AppointmentListResource(Resource):
         session = db_session.create_session()
         appointments = session.query(Appointments).all()
         return jsonify({'appointments': [
-            item.to_dict(only=('message', 'datetime', 'platform', 'link', 'hr', 'finder', 'is_actual'))
+            item.to_dict(only=('vacancy_id', 'message', 'datetime', 'platform', 'link', 'hr', 'finder', 'is_actual'))
             for item in appointments]})
 
     def post(self):
@@ -52,6 +52,7 @@ class AppointmentListResource(Resource):
         appointment.link = args["link"]
         appointment.hr = args["hr"]
         appointment.finder = args["finder"]
+        appointment.vacancy_id = args["vacancy_id"]
 
         session.add(appointment)
         session.commit()
