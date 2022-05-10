@@ -27,7 +27,7 @@ from data.appointments import Appointments
 
 from data import db_session
 
-PATH = 'http://127.0.0.1:5000'
+PATH = 'https://searchwork.herokuapp.com'
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
