@@ -5,3 +5,4 @@ SQLAlchemy-serializer
 flask-login
 flask-restful
 requests
+gunicorn
