@@ -2,8 +2,14 @@
 <section class="section-padding bg-gray" style="min-height: 730px">
     <div class="container">
         <div class="section-intro text-center pb-90px">
+            {% if current_user.id == user.id %}
+            <a href="/profile/add-photo">
+            {% endif %}
             <img class="rounded-circle" src="{{ url_for('static', filename='profile-img/' + user.photo) }}"
                  width="300" height="300">
+            {% if current_user.id == user.id %}
+            </a>
+            {% endif %}
             <h2>{{ user.name }} {{ user.surname }}</h2>
             <p>{{ user.user_type }}</p>
         </div>
@@ -47,6 +53,7 @@
         </div>
         {% endfor %}
         <a class="button calendar-button text-center" href="/calendar">Календарь</a>
+        <a class="button calendar-button text-center" href="/applications">Заявки</a>
     </div>
     </div>
 </section>

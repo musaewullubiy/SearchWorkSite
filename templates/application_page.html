@@ -10,12 +10,18 @@
             <div class="testimonial__content mt-3 mt-sm-0">
                 <div class="row">
                     <h3 class="col">Заявка на собеседование: {{ result.vacancy_id }}</h3>
+                    {% if current_user.user_type == 'HR-менеджер' %}
                     <a class="col-md-2 btn btn-primary" href="/application/apply/{{ result.id }}">Принять</a>
+                    {% endif %}
                     <a class="col-md-2 btn btn-danger" href="/application/cancel/{{ result.id }}">Отклонить</a>
                 </div>
                 <p>{{ result.platform }} {{ result.link }}</p>
                 <a href="/vacancy/{{ result.vacancy_id }}">Ссылка на вакансию</a>
+                {% if current_user.user_type == 'HR-менеджер' %}
                 <a href="/profile/{{ result.finder }}">Ссылка на профиль соискателя</a>
+                {% else %}
+                <a href="/profile/{{ result.hr }}">Ссылка на профиль HR</a>
+                {% endif %}
                 <p class="testimonial__i">{{ result.message }}</p>
                 <span class="testimonial__icon"><i class="ti-quote-right"></i></span>
             </div>

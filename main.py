@@ -205,6 +205,19 @@ def delete_project(project_id):
     return redirect(f'/profile/{current_user.id}')
 
 
+@app.route('/delete-vacancy/<int:vacancy_id>')
+@login_required
+def delete_vacancy(vacancy_id):
+    data = get(PATH + f'/api/vacancy/{vacancy_id}').json()['Vacancy']
+    try:
+        if current_user.id == data['hr_manager']:
+            delete(PATH + f'/api/vacancy/{vacancy_id}')
+            return redirect(f'/profile/{current_user.id}')
+    except Exception:
+        return redirect(f'/profile/{current_user.id}')
+    return redirect(f'/profile/{current_user.id}')
+
+
 @app.route('/search/<string:search_text>', methods=['GET', 'POST'])
 def search_page_2(search_text):
     form = SearchForm()
